@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Container, Spinner, Alert } from 'react-bootstrap';
+import { Table, Card, Spinner, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import './TableNav.css'; // Import custom CSS for additional styling
 
@@ -14,11 +14,16 @@ const TablePeminjaman = () => {
 
   const fetchLoanData = async () => {
     try {
-      const response = await axios.get('https://f74e-34-82-232-76.ngrok-free.app/loan_data');
+      const response = await axios.get('https://f679-35-237-125-138.ngrok-free.app/loan_data', {
+        headers: {
+          'ngrok-skip-browser-warning': 'true'
+        }
+      });
       setLoanData(response.data);
-      setLoading(false);
     } catch (error) {
+      console.error('Error fetching loan data:', error);
       setError('Error fetching loan data. Please try again later.');
+    } finally {
       setLoading(false);
     }
   };
@@ -32,42 +37,37 @@ const TablePeminjaman = () => {
   }
 
   return (
-    <Container fluid className="mt-4">
-      <h4 className="table-title text-purple mb-4">Data Peminjaman</h4>
-      <div className="table-responsive">
-        <Table bordered hover className="table-custom">
-          <thead className="bg-purple text-white">
-            <tr>
-              <th>No.</th>
-              <th>Judul Buku</th>
-              <th>Penulis</th>
-              <th>Kategori</th>
-              <th>Tahun Terbit</th>
-              <th>Total Peminjam</th>
-            </tr>
-          </thead>
-          <tbody>
-          {Array.isArray(loanData) ? (
-          loanData.map((item, index) => (
-    <tr key={index}>
-      <td>{index + 1}</td>
-      <td>{item.judul}</td>
-      <td>{item.penulis}</td>
-      <td>{item.kategori}</td>
-      <td>{item.tahun_terbit}</td>
-      <td>{item.total_peminjam}</td>
-    </tr>
-  ))
-) : (
-  <tr>
-    <td colSpan="6">No data available</td>
-  </tr>
-)}
-
-          </tbody>
-        </Table>
-      </div>
-    </Container>
+    <Card className="mt-4" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+      <Card.Body>
+        <Card.Title className="table-title text-purple mb-4">Data Peminjaman</Card.Title>
+        <div className="table-responsive" style={{ maxHeight: '600px', overflowY: 'scroll', fontSize:'18px' }}>
+          <Table bordered hover className="table-custom">
+            <thead className="bg-purple text-white">
+              <tr>
+                <th>No.</th>
+                <th>Judul Buku</th>
+                <th>Penulis</th>
+                <th>Kategori</th>
+                <th>Tahun Terbit</th>
+                <th>Total Peminjam</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loanData.map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item.judul}</td>
+                  <td>{item.penulis}</td>
+                  <td>{item.kategori}</td>
+                  <td>{item.tahun_terbit}</td>
+                  <td>{item.total_peminjam}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 
