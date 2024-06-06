@@ -3,26 +3,26 @@ import { Table, Card, Spinner, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import './TableNav.css'; 
 
-const TablePeminjaman = () => {
-  const [loanData, setLoanData] = useState([]);
+const ByTitle = ({ selectedBookTitle }) => {
+  const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetchLoanData();
-  }, []);
+    if (selectedBookTitle) {
+      fetchRecommendations(selectedBookTitle);
+    }
+  }, [selectedBookTitle]);
 
-  const fetchLoanData = async () => {
+  const fetchRecommendations = async (bookTitle) => {
     try {
-      const response = await axios.get('https://7f99-34-138-6-178.ngrok-free.app/loan_data', {
-        headers: {
-          'ngrok-skip-browser-warning': 'true'
-        }
+      const response = await axios.post('https://7f99-34-138-6-178.ngrok-free.app/recommend', {
+        judul_pencarian: bookTitle
       });
-      setLoanData(response.data);
+      setRecommendations(response.data);
     } catch (error) {
-      console.error('Error fetching loan data:', error);
-      setError('Error fetching loan data. Please try again later.');
+      console.error('Error fetching recommendations:', error);
+      setError('Error fetching recommendations. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -39,7 +39,7 @@ const TablePeminjaman = () => {
   return (
     <Card className="mt-4" style={{ boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
       <Card.Body>
-        <Card.Title className="table-title text-purple mb-4">Data Peminjaman</Card.Title>
+        <Card.Title className="table-title text-purple mb-4">Rekomendasi Buku untuk "{selectedBookTitle}"</Card.Title>
         <div className="table-responsive" style={{ maxHeight: '600px', overflowY: 'scroll', fontSize:'18px' }}>
           <Table bordered hover className="table-custom">
             <thead className="bg-purple text-white">
@@ -49,18 +49,18 @@ const TablePeminjaman = () => {
                 <th>Penulis</th>
                 <th>Kategori</th>
                 <th>Tahun Terbit</th>
-                <th>Total Peminjam</th>
+                <th>Rating</th>
               </tr>
             </thead>
             <tbody>
-              {loanData.map((item, index) => (
+              {recommendations.map((book, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{item.judul}</td>
-                  <td>{item.penulis}</td>
-                  <td>{item.kategori}</td>
-                  <td>{item.tahun_terbit}</td>
-                  <td>{item.total_peminjam}</td>
+                  <td>{book.judul}</td>
+                  <td>{book.penulis}</td>
+                  <td>{book.kategori}</td>
+                  <td>{book.tahun_terbit}</td>
+                  <td>{book.rating}</td>
                 </tr>
               ))}
             </tbody>
@@ -71,4 +71,4 @@ const TablePeminjaman = () => {
   );
 };
 
-export default TablePeminjaman;
+export default ByTitle;

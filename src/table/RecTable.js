@@ -1,13 +1,12 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import './TableNav.css'; // Import custom CSS for additional styling
 
 const RecTable = ({ recommendations, category }) => {
   return (
-    <div className="table-responsive" style={{ maxHeight: '600px', overflowY: 'scroll', fontSize:'18px' }}>
-      <h3>Top Recommendations in {category}</h3>
+    <div className="table-responsive" style={{ maxHeight: '600px', overflowY: 'scroll', fontSize: '18px' }}>
+      <h3>Top 10 Recommendations for {category}</h3>
       <Table bordered hover className="table-custom">
-        <thead className="bg-purpletext-white">
+        <thead className="bg-purple text-white">
           <tr>
             <th>No.</th>
             <th>Judul Buku</th>
@@ -15,11 +14,10 @@ const RecTable = ({ recommendations, category }) => {
             <th>Kategori</th>
             <th>Tahun Terbit</th>
             <th>Rating</th>
-
           </tr>
         </thead>
         <tbody>
-          {recommendations.map((book, index) => (
+          {recommendations && recommendations.map((book, index) => ( // Periksa apakah recommendations ada sebelum memanggil map()
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{book.judul}</td>
