@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Card, Row, Col, Spinner, Alert, Table, Button } from 'react-bootstrap';
+import { Card, Row, Col, Spinner, Alert, Button, Table } from 'react-bootstrap';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import TableRec from '../table/TableRec';
 import RecTable from '../table/RecTable';
@@ -24,7 +24,7 @@ const ChartPeminjaman = () => {
 
   const fetchLoanData = async () => {
     try {
-      const response = await axios.get('https://7f99-34-138-6-178.ngrok-free.app/loan_data', {
+      const response = await axios.get('https://1a6c-35-194-64-63.ngrok-free.app/loan_data', {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }
@@ -40,7 +40,7 @@ const ChartPeminjaman = () => {
 
   const fetchCategoryBooks = async (category) => {
     try {
-      const response = await axios.post('https://7f99-34-138-6-178.ngrok-free.app/find_books_and_recommendations_by_category', {
+      const response = await axios.post('https://1a6c-35-194-64-63.ngrok-free.app/find_books_and_recommendations_by_category', {
         category_title: category, 
         limit: 10
       });
@@ -58,8 +58,8 @@ const ChartPeminjaman = () => {
 
   const handleRecommendation = async (bookTitle) => {
     try {
-      const response = await axios.post('https://7f99-34-138-6-178.ngrok-free.app/recommend', {
-        judul_pencarian: bookTitle
+      const response = await axios.post('https://1a6c-35-194-64-63.ngrok-free.app/recommend', {
+        input_book_title: bookTitle
       });
       const recommendations = response.data;
       console.log('Recommendations:', recommendations);
@@ -129,22 +129,16 @@ const ChartPeminjaman = () => {
         <Card>
           <Card.Body>
             <Card.Title>10 Penulis Terpopuler</Card.Title>
-            <Table striped bordered hover style={{ fontSize: '18px' }}>
-              <thead style={{ fontSize: '18px' }}>
-                <tr>
-                  <th>Nama Penulis</th>
-                  <th>Total Peminjam</th>
-                </tr>
-              </thead>
-              <tbody style={{ fontSize: '18px' }}>
-                {topAuthors.map((book, index) => (
-                  <tr key={index}>
-                    <td>{book.penulis}</td>
-                    <td>{book.total_peminjam}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={topAuthors.map(author => ({ name: author.penulis, total: author.total_peminjam }))} margin={{ top: 20, right: 30, left: 20, bottom: 120 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" interval={0} />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="total" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
           </Card.Body>
         </Card>
       </Col>
@@ -162,7 +156,6 @@ const ChartPeminjaman = () => {
                 <Bar dataKey="total" fill="#8884d8" />
               </BarChart>
             </ResponsiveContainer>
-
             {showTableRec ? (
               <div>
                 <TableRec books={selectedCategoryBooks} category={selectedCategory} onRecommend={handleRecommendation} />
@@ -212,27 +205,20 @@ const ChartPeminjaman = () => {
           </Card.Body>
         </Card>
       </Col>
-
       <Col md={4}>
         <Card>
           <Card.Body>
             <Card.Title>10 Judul Buku Terpopuler</Card.Title>
-            <Table striped bordered hover style={{ fontSize: '18px' }}>
-              <thead style={{ fontSize: '18px' }}>
-                <tr>
-                  <th>Judul Buku</th>
-                  <th>Total Peminjam</th>
-                </tr>
-              </thead>
-              <tbody style={{ fontSize: '18px' }}>
-                {topBooks.map((book, index) => (
-                  <tr key={index}>
-                    <td>{book.judul}</td>
-                    <td>{book.total_peminjam}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={topBooks.map(book => ({ name: book.judul, total: book.total_peminjam }))} margin={{ top: 20, right: 30, left: 20, bottom: 120 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" angle={-45} textAnchor="end" interval={0} />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="total" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
           </Card.Body>
         </Card>
       </Col>
@@ -241,5 +227,3 @@ const ChartPeminjaman = () => {
 };
 
 export default ChartPeminjaman;
-
-

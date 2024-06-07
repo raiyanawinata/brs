@@ -16,8 +16,8 @@ const ByTitle = ({ selectedBookTitle }) => {
 
   const fetchRecommendations = async (bookTitle) => {
     try {
-      const response = await axios.post('https://7f99-34-138-6-178.ngrok-free.app/recommend', {
-        judul_pencarian: bookTitle
+      const response = await axios.post('https://1a6c-35-194-64-63.ngrok-free.app/recommend', {
+        input_book_title: bookTitle
       });
       setRecommendations(response.data);
     } catch (error) {
