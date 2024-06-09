@@ -14,7 +14,7 @@ const TablePeminjaman = () => {
 
   const fetchLoanData = async () => {
     try {
-      const response = await axios.get('https://1a6c-35-194-64-63.ngrok-free.app/loan_data', {
+      const response = await axios.get('https://4ba0-34-150-128-12.ngrok-free.app/loan_data', {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }
