@@ -3,6 +3,8 @@ import { Table, Card, Spinner, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import './TableNav.css'; 
 
+
+const apiUrl = process.env.REACT_APP_API_BACKEND;
 const ByTitle = ({ selectedBookTitle }) => {
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ const ByTitle = ({ selectedBookTitle }) => {
 
   const fetchRecommendations = async (bookTitle) => {
     try {
-      const response = await axios.post('https://4ba0-34-150-128-12.ngrok-free.app/recommend', {
+      const response = await axios.post(apiUrl + '/recommend', {
         input_book_title: bookTitle
       });
       setRecommendations(response.data);

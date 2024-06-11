@@ -11,6 +11,7 @@ export default function Top10BookRecommend({ activeCateg }) {
     useEffect(() => {
         fetchRecommendedBookByCateg(activeCateg[0], setBookRecom);
     }, [activeCateg[0]])
+    console.log(bookRecom)
 
     return (
         <div className='card card-flush h-xl-100 border'>
@@ -31,7 +32,7 @@ export default function Top10BookRecommend({ activeCateg }) {
                     ) : bookRecom.message ? (
                         <AlertNotif color="danger" message={bookRecom.message} />
                     ) : Object.values(bookRecom.data).length > 0 ? (
-                        bookRecom.data.map((v, index) => (
+                        bookRecom.data.recommendations.map((v, index) => (
                             <div key={index}>
                                 <div className='book-recom-item'>
                                     <span className="text-gray-800 fw-bold text-hover-primary fs-6 d-block">

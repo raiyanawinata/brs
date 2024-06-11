@@ -7,19 +7,26 @@ import axios from 'axios';
 
 
 const apiUrl = process.env.REACT_APP_API_BACKEND;
+
+
 export default function Contents() {
   const [loanData, setLoadData] = useState({ loading: false, data: [], message: "" });
-
+  const [collectionCount, setCollectionCount] = useState(0);
+  const [classificationCount, setClassificationCount] = useState(0);
+  const [loanClassificationCount, setLoanClassificationCount] = useState(0);
   useEffect(() => {
-    fetchLoanData(setLoadData)
+    fetchLoanData(setLoadData);
+    fetchCollectionCount(setCollectionCount);
+    fetchClassificationCount(setClassificationCount);
+    fetchLoanClassificationCount(setLoanClassificationCount);
   }, []);
 
 
-  const currentCollectionBook = { total: 23456, name: "Total koleksi" };
+  const currentCollectionBook = { total: collectionCount, name: "Total koleksi" };
   const currentBookLoan = { total: Object.values(loanData.data).length , name: "Total dipinjam" };
 
-  const currentTotalCategory = { total: 12, name: "Total koleksi" };
-  const currentTotalLoanByCategory = { total: 8, name: "Total dipinjam" };
+  const currentTotalCategory = { total: classificationCount, name: "Total koleksi" };
+  const currentTotalLoanByCategory = { total: loanClassificationCount, name: "Total dipinjam" };
 
   const navTabs = [{ id: 1, name: "Daftar Buku Dipinjam", content: "nav-loan-book", component: <TopBookLoans loanData={loanData} /> },
   { id: 2, name: "Popular Item", content: "nav-popularity", component: <PopularItems loanData={loanData} /> }]
@@ -69,3 +76,32 @@ const fetchLoanData = async (setLoanData) => {
     setLoanData({ loading: false, data: [], message: "Terjadi kesalahan dalam koneksi ke server. Silakan coba lagi nanti." });
   }
 };
+
+const fetchCollectionCount = async (setCollectionCount) => {
+  try{
+    const response = await axios.get('http://localhost:3500/biblio/count');
+    setCollectionCount(response.data.count);
+  } catch(error){
+    console.error("Error Fetching collection count: ", error);
+  }
+};
+
+const fetchClassificationCount = async (setClassificationCount) => {
+  try{
+    const response = await axios.get('http://localhost:3500/biblio/classification/count');
+    setClassificationCount(response.data.count);
+  } catch(error){
+    console.error("Error Fetching classification count: ", error);
+  }
+};
+
+const fetchLoanClassificationCount = async (setLoanClassificationCount) => {
+  try{
+    const response = await axios.get('http://localhost:3500/data_peminjam/classification/count');
+    // setLoanClassificationCount(response.data.unique_classification_count);
+    setLoanClassificationCount(response.data.unique_classification_count);
+  } catch(error){
+    console.error("Error Fetching classification count: ", error);
+  }
+};
+

@@ -3,6 +3,8 @@ import { Table, Card, Spinner, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import './TableNav.css'; 
 
+
+const apiUrl = process.env.REACT_APP_API_BACKEND;
 const TablePeminjaman = () => {
   const [loanData, setLoanData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,7 +16,7 @@ const TablePeminjaman = () => {
 
   const fetchLoanData = async () => {
     try {
-      const response = await axios.get('https://4ba0-34-150-128-12.ngrok-free.app/loan_data', {
+      const response = await axios.get(apiUrl + + '/loan_data', {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }

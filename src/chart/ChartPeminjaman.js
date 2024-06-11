@@ -6,6 +6,8 @@ import TableRec from '../table/TableRec';
 import RecTable from '../table/RecTable';
 import ByTitle from '../table/ByTitle';
 
+
+const apiUrl = process.env.REACT_APP_API_BACKEND;
 const ChartPeminjaman = () => {
   const [loanData, setLoanData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +26,7 @@ const ChartPeminjaman = () => {
 
   const fetchLoanData = async () => {
     try {
-      const response = await axios.get('https://4ba0-34-150-128-12.ngrok-free.app/loan_data', {
+      const response = await axios.get(apiUrl + '/loan_data', {
         headers: {
           'ngrok-skip-browser-warning': 'true'
         }
@@ -40,7 +42,7 @@ const ChartPeminjaman = () => {
 
   const fetchCategoryBooks = async (category) => {
     try {
-      const response = await axios.post('https://1a6c-35-194-64-63.ngrok-free.app/find_books_and_recommendations_by_category', {
+      const response = await axios.post( apiUrl +'/find_books_and_recommendations_by_category', {
         category_title: category, 
         limit: 10
       });
@@ -58,7 +60,7 @@ const ChartPeminjaman = () => {
 
   const handleRecommendation = async (bookTitle) => {
     try {
-      const response = await axios.post('https://1a6c-35-194-64-63.ngrok-free.app/recommend', {
+      const response = await axios.post( apiUrl + '/recommend', {
         input_book_title: bookTitle
       });
       const recommendations = response.data;
