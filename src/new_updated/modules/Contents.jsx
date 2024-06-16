@@ -7,6 +7,7 @@ import axios from 'axios';
 
 
 const apiUrl = process.env.REACT_APP_API_BACKEND;
+const apiBackend = process.env.REACT_APP_DB_PERPUS;
 
 
 export default function Contents() {
@@ -79,7 +80,7 @@ const fetchLoanData = async (setLoanData) => {
 
 const fetchCollectionCount = async (setCollectionCount) => {
   try{
-    const response = await axios.get('http://localhost:3500/biblio/count');
+    const response = await axios.get(apiBackend+'/biblio/count');
     setCollectionCount(response.data.count);
   } catch(error){
     console.error("Error Fetching collection count: ", error);
@@ -88,7 +89,7 @@ const fetchCollectionCount = async (setCollectionCount) => {
 
 const fetchClassificationCount = async (setClassificationCount) => {
   try{
-    const response = await axios.get('http://localhost:3500/biblio/classification/count');
+    const response = await axios.get(apiBackend+'/biblio/classification/count');
     setClassificationCount(response.data.count);
   } catch(error){
     console.error("Error Fetching classification count: ", error);
@@ -97,7 +98,7 @@ const fetchClassificationCount = async (setClassificationCount) => {
 
 const fetchLoanClassificationCount = async (setLoanClassificationCount) => {
   try{
-    const response = await axios.get('http://localhost:3500/data_peminjam/classification/count');
+    const response = await axios.get(apiBackend+'/data_peminjam/classification/count');
     // setLoanClassificationCount(response.data.unique_classification_count);
     setLoanClassificationCount(response.data.unique_classification_count);
   } catch(error){

@@ -2,7 +2,6 @@ import React from 'react'
 
 export default function Top10BookCategory({ activeCateg, loandata }) {
     const bookCateg = loandata.filter(item => item.kategori === activeCateg[0]);
-    console.log(bookCateg);
     const top10 = bookCateg.slice(0, 10);
 
     return (
